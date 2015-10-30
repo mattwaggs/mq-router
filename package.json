@@ -1,0 +1,23 @@
+{
+  "name": "mq-router",
+  "version": "1.0.0",
+  "description": "A simplified implementation of amqplib.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattwaggs/mq-router.git"
+  },
+  "author": "Matt Waggoner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mattwaggs/mq-router/issues"
+  },
+  "homepage": "https://github.com/mattwaggs/mq-router#readme",
+  "dependencies": {
+    "amqplib": "^0.4.0",
+    "bluebird": "^3.0.2"
+  }
+}
