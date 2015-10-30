@@ -6,7 +6,7 @@ Sometimes you just need a simple way of sending messages from one service to ano
 ```javascript
 var mq = require('mq-router');
 // connect to RabbitMQ server
-mq.init(connectionString).then(function() {
+mq.init('amqp://localhost').then(function() {
   // listen for requests on a specific queue
   mq.rpc.receive('route.path', function(req, res) {
     // do someting with the request.
