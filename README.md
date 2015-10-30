@@ -1,6 +1,10 @@
 # mq-router
 A simple way to interact with a RabbitMQ server in nodejs
+<br/>
+> Note: This is just a *very simple* implementation of amqplib 
 
+
+<br/>
 Sometimes you just need a simple way of sending messages from one service to another. MQ-Router aims to make interacting with a message queue similar to using the express router.
 
 ```javascript
