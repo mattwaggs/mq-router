@@ -60,7 +60,6 @@ mq.pubsub.receive('someExchange', 'someQueue', 'direct', function(req) {
 
 ```
 
-The third parameter in pubsub is the exchange type.  This can be **direct** or **fanout**. Direct will handle the messages in a round robbin way, while fanout will send the message to all receivers. 
-
+The third parameter in pubsub is the exchange type.  This can be **direct** or **fanout**. Direct will handle the messages in a round robbin way, while fanout will send the message to all receivers.  It's important to note that in pub/sub the first 3 parameters need to match on both the sending and receiving parties.
 
 Copyright (c) 2015 Matt Waggoner (mattwaggs)
