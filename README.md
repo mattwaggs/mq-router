@@ -20,11 +20,12 @@ mq.init('amqp://localhost').then(function() {
 });
 ```
 
-There are currently two options for sending and receiving messages.
+There are currently three options for sending and receiving messages.
  - rpc
  - pub/sub
+ - work
 
-Both **rpc**, and **pub/sub** have a send(), and receive() function.
+Both **rpc**, **work**, and **pub/sub** have a send(), and receive() function.
 
 ###Examples of RPC:
 ```javascript
@@ -61,5 +62,27 @@ mq.pubsub.receive('someExchange', 'someQueue', 'direct', function(req) {
 ```
 
 The third parameter in pubsub is the exchange type.  This can be **direct** or **fanout**. Direct will handle the messages in a round robbin way, while fanout will send the message to all receivers.  It's important to note that in pub/sub the first 3 parameters need to match on both the sending and receiving parties.
+
+
+Pub/Sub does not persist messages.  Subscribers will only receive messages sent during its lifetime. If a message is sent before the subscriber is alive, the subscriber will never receive the message.
+with pub/sub it is possible that no one will receive the message if no one is listening. 
+
+
+###Examples of Work queue
+```javascript
+
+// Server A needs to tell server B to do something when it gets a chance.
+mq.work.send('someWorkQueue', someMessage);
+
+// Server B will fetch any messages it has and get to work.
+mq.work.receive('someWorkQueue', function(req) {
+  var data = req.content;
+  // do something with data
+});
+
+```
+
+
+If server B is not active when the message is sent, it will still receive the message when it comes online.
 
 Copyright (c) 2015 Matt Waggoner (mattwaggs)
