@@ -29,7 +29,7 @@ describe('Checking if mq-router can connect', function() {
 
 
 function afterConnect() {
-	describe('Checking if mq-router can send and receive messages on rpc.', function() {
+	/*describe('Checking if mq-router can send and receive messages on rpc.', function() {
 
 
 		it('should receive item A on rpc.receive', function() {
@@ -50,7 +50,7 @@ function afterConnect() {
 		});	
 		
 
-	});
+	});*/
  
 
 	describe('Checking if mq-router can send and receive messages on pub/sub.', function() {
@@ -91,7 +91,34 @@ function afterConnect() {
 			
 		});
 
-	
+	});
+
+
+
+	describe('Checking if mq-router receive() can handle middleware style callbacks', function() {
+
+		it('should increment value from 1 to 3 using middleware', function(done) {
+			 
+			var step1 = function(req, res, next) {
+				req.body.number += 1;
+				next();
+			}
+			var step2 = function(req, res, next) {
+				req.body.number += 1;
+				next();
+			}
+			mq.rpc.receive('middlewareTest', step1, step2, function(req, res, next) {
+				expect(req.body.number).to.equal(3);
+				done();
+			});
+			setTimeout(function() { // to ensure that the rpc queue is available.
+				mq.rpc.send('middlewareTest', {'body': {'number': 1}}, function(reply) {
+					//done();
+				});
+			}, 50);
+			
+		});
+
 	});
  
 
