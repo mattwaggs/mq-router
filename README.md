@@ -1,4 +1,6 @@
 # mq-router
++ *Not stable. Still in development.* 
+
 A simple way to interact with a RabbitMQ server in nodejs
 <br/>
 > Note: This is just a *very simple* implementation of amqplib 
@@ -12,13 +14,36 @@ var mq = require('mq-router');
 // connect to RabbitMQ server
 mq.init('amqp://localhost').then(function() {
   // listen for requests on a specific queue
-  mq.rpc.receive('route.path', function(req, res) {
+  mq.rpc.receive('route.path',  function(req, res, next) {
     // do someting with the request.
     res.send(newData);
   });
   
+  // Similar to express or connect, middleware can be also attached to these routes
+  mq.rpc.receive('route.getThing', hasAuthentication, someMiddleware, function(req, res, next) {
+    res.send(newData);
+  });
 });
 ```
+
+The goal of this module is to enable certain api endpoints to be accessible by message queues in the same way they are accessible from http routes.
+
+```javascript
+// example api endpoint
+api.v1.users.getUser = function(req, res, next) {
+  var user = UserModel.get(req.query.userId);
+  res.send(user);
+}
+
+// access api endpoint via http route
+router.get('/api/v1/users?userId=123', someMiddleware, api.v1.users.getUser);
+// access api endpoint via message queue
+mq.rpc.receive('api.v1.users.getUser', someMiddleware, api.v1.users.getUser);
+// notice the method signature is the same. 
+// this makes it easy for the message queue to work similar to express routes.
+```
+
+**request**, **response** and **next** will be passed to each middleware or callback passed in, however response is really only needed for rpc as rpc is the only one capable of sending a response.
 
 There are currently three options for sending and receiving messages.
  - rpc
